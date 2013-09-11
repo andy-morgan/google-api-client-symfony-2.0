@@ -26,6 +26,7 @@ $client->setApplicationName("Google UserInfo PHP Starter Application");
 // $client->setClientSecret('insert_your_oauth2_client_secret');
 // $client->setRedirectUri('insert_your_redirect_uri');
 // $client->setDeveloperKey('insert_your_developer_key');
+
 $oauth2 = new Google_Oauth2Service($client);
 
 if (isset($_GET['code'])) {
