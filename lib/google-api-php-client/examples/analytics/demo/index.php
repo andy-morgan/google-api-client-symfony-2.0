@@ -45,9 +45,12 @@ require_once 'authHelper.php';
 
 // These must be set with values YOU obtains from the APIs console.
 // See the Usage section above for details.
-const REDIRECT_URL = 'INSERT YOUR REDIRECT URL HERE';
-const CLIENT_ID = 'INSERT YOUR CLIENT ID HERE';
-const CLIENT_SECRET = 'INSERT YOUR CLIENT SECRET';
+
+const REDIRECT_URL = 'http://localhost/telnames/renewals/google-api-php-client/examples/analytics/demo/';
+const CLIENT_ID = '803794130430.apps.googleusercontent.com';
+const CLIENT_SECRET = '3T8mDBu-6kpn3xgI1OR_o5Up';
+
+
 
 // The file name of this page. Used to create various query parameters to
 // control script execution.
@@ -89,10 +92,10 @@ $authHelper = new AuthHelper($client, $storage, THIS_PAGE);
 
 // Main controller logic.
 
-if ($_GET['action'] == 'revoke') {
+if (isset($_GET['action']) && $_GET['action'] == 'revoke') {
   $authHelper->revokeToken();
 
-} else if ($_GET['action'] == 'auth' || $_GET['code']) {
+} else if ((isset($_GET['action']) && $_GET['action'] == 'auth') || (isset($_GET['code']) && $_GET['code'])) {
   $authHelper->authenticate();
 
 } else {
@@ -101,7 +104,7 @@ if ($_GET['action'] == 'revoke') {
   if ($authHelper->isAuthorized()) {
     $analytics = new Google_AnalyticsService($client);
 
-    if ($_GET['demo'] == 'hello') {
+    if (isset($_GET['demo']) && $_GET['demo'] == 'hello') {
 
       // Hello Analytics API Demo.
       require_once 'helloAnalyticsApi.php';
@@ -110,7 +113,7 @@ if ($_GET['action'] == 'revoke') {
       $htmlOutput = $demo->getHtmlOutput();
       $demoError = $demo->getError();
 
-    } else if ($_GET['demo'] == 'mgmt') {
+    } else if (isset($_GET['demo']) && $_GET['demo'] == 'mgmt') {
 
       // Management API Reference Demo.
       require_once 'managementApiReference.php';
@@ -119,7 +122,7 @@ if ($_GET['action'] == 'revoke') {
       $htmlOutput = $demo->getHtmlOutput();
       $demoError = $demo->getError();
 
-    } else if ($_GET['demo'] == 'reporting') {
+    } else if (isset($_GET['demo']) && $_GET['demo'] == 'reporting') {
 
       // Core Reporting API Reference Demo.
       require_once 'coreReportingApiReference.php';
@@ -140,7 +143,7 @@ if ($_GET['action'] == 'revoke') {
 }
 
 // Consolidate errors and make sure they are safe to write.
-$errors = $demoError ? $demoError : $authHelper->getError();
+$errors = isset($demoError) ? $demoError : $authHelper->getError();
 $errors = htmlspecialchars($errors, ENT_NOQUOTES);
 ?>
 
@@ -202,7 +205,7 @@ $errors = htmlspecialchars($errors, ENT_NOQUOTES);
     print "<div>There was an error: <br> $errors</div>";
   } else if ($authHelper->isAuthorized()) {
     print "<div>$htmlOutput</div>";
-  } 
+  }
 ?>
 
   </body>
